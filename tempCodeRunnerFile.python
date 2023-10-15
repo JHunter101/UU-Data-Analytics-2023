@@ -1,0 +1,35 @@
+
+from math import floor
+
+def test():  
+    def maxProfit(inventory, orders):
+        inventory.sort(reverse=True)
+        inventory.append(0)
+        mod = 10 ** 9 + 7
+        profit = 0
+        n = len(inventory)
+
+        def calc(a, b):
+            return (a + b) * (a - b + 1) // 2
+
+        i = 0
+        while orders > 0:
+            count = inventory[i] - inventory[i + 1]
+            if (i + 1) * count <= orders:
+                profit += (i + 1) * calc(inventory[i], inventory[i + 1])
+                orders -= (i + 1) * count
+            else:
+                full_rows = orders // (i + 1)
+                remaining_balls = orders % (i + 1)
+                max_color = inventory[i]
+                profit += (i + 1) * calc(max_color, max_color - full_rows + 1)
+                profit += remaining_balls * (max_color - full_rows)
+                break
+            i += 1
+
+        return profit % mod
+    inventory = [497978859,167261111,483575207,591815159]
+    orders = 836556809
+
+    print(maxProfit(inventory, orders))
+test()
